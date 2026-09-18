@@ -28,6 +28,12 @@ Head of Core Products / Codex）—— 社区所说的 "Tibo reset" 就是他发
 防护，还有对上游真实行为的实测结论。app 只做「监督 + 界面 + 通知」，不重写采集逻辑。
 两者之间是带版本号的 JSON 契约，版本对不上时 app 会明确报错而不是静默解析错。
 
+## 系统界面
+
+macOS 菜单栏应用会显示今日重置概率、判定依据、最近帖子和监控状态：
+
+![X 重置监控 macOS 菜单栏应用](docs/assets/xwatch-monitor.png)
+
 ## 快速开始
 
 只想在命令行用采集引擎：
