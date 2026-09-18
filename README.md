@@ -1,9 +1,13 @@
-# x-crawl
+# codex-reset-radar
 
 盯着指定 X 博主的公开帖子，用大模型判断有没有在宣布**用量限额重置**，命中就弹 macOS 通知。
 
 典型监控对象是 [@thsottiaux](https://x.com/thsottiaux)（Thibault "Tibo" Sottiaux，OpenAI
 Head of Core Products / Codex）—— 社区所说的 "Tibo reset" 就是他发的。
+
+> **目录名与仓库名不同**：GitHub 上叫 `codex-reset-radar`，clone 下来的目录名随你。
+> 本机开发时它在 `~/side/x-crawl/`，app 的默认项目路径就指向那里 —— 换位置的话在
+> 设置面板里改「x-watch 项目」即可，不用改代码。
 
 ## 两个组件
 
