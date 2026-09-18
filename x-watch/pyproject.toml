@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "x-watch"
+version = "0.1.0"
+description = "定期收集指定 X 博主的公开帖子，存入 SQLite 并导出 Markdown"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+# 运行时零第三方依赖 —— 全部使用标准库。
+# 方案 §3.1 建议 httpx / feedparser / filelock / tomli，这里改为标准库实现：
+#   httpx      → urllib.request（同样读取 HTTP_PROXY / HTTPS_PROXY 环境变量）
+#   feedparser → xml.etree.ElementTree + html.parser
+#   filelock   → fcntl.flock / msvcrt.locking（见 src/x_watch/lock.py）
+#   tomli      → tomllib（3.11+）/ tomli / 内置子集解析器（见 toml_compat.py）
+# 这样定时任务不会因为依赖漂移而失败，也不需要锁定第三方版本。
+dependencies = []
+
+[project.optional-dependencies]
+# Python 3.9 / 3.10 上想用完整 TOML 语法（内联数组、多段表名）时可选安装。
+# 本项目自带的 config.toml 语法不需要它。
+toml = ["tomli>=2.0"]
+
+[project.scripts]
+x-watch = "x_watch.__main__:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

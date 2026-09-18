@@ -1,0 +1,46 @@
+# Local runtime configuration and secrets
+x-watch/config.toml
+.env
+.env.*
+!.env.example
+
+# Runtime data, scraped archives, logs, and local databases
+x-watch/data/
+x-watch/logs/
+x-watch/output/
+
+# Build and packaged application artifacts
+XWatchMonitor/dist/
+XWatchMonitor/.build/
+
+# Python caches and environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Swift/Xcode local state
+.DS_Store
+*.xcodeproj/xcuserdata/
+
+# Planning and local working notes
+.planning/
+task_plan.md
+progress.md
+findings.md
+XWatchMonitor/progress.md
+XWatchMonitor/findings.md
+
+# Article drafts and research writeups (kept local by request)
+*.md
+!x-watch/README.md
+!x-watch/docs/source-validation.md
+!XWatchMonitor/README.md
+
+# Local generated/editor files
+*.sqlite3
+*.sqlite3-*
+*.lock
+research/

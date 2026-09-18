@@ -1,0 +1,99 @@
+# x-watch 配置示例
+#
+# 下面的账号只是格式示例，不代表推荐监控对象。正式运行前请改成你自己的清单。
+# 相对路径统一相对于本配置文件所在目录解析，与当前工作目录无关。
+
+[app]
+database_path = "data/x-watch.sqlite3"
+output_dir = "output"
+raw_dir = "data/raw"
+log_dir = "logs"
+# "local" 跟随运行机器时区；也可写 "UTC" 或 "Asia/Shanghai" 等 IANA 名称。
+# 数据库内部一律存 UTC，这里只影响 Markdown 展示与每日索引的日期归属。
+display_timezone = "local"
+
+[source]
+# fxtwitter_json（主模式，已实测）或 fxtwitter_rss（兼容模式，字段少、不支持分页）
+provider = "fxtwitter_json"
+# 主源失败时不自动切到 RSS。两者是同一上游，换格式不是高可用手段。
+auto_fallback = false
+# 请求意图值。实测上游不遵守该参数（请求 5 实返 36），不能当成预期条数。
+page_size = 50
+include_replies = true
+user_agent = "x-watch/0.1 (personal archive tool)"
+
+[collection]
+# 供 scripts/ 下的定时任务注册脚本读取。run-once 自身不常驻调度。
+# 改这个值后必须重新注册系统任务，只改配置不会改变实际触发频率。
+interval_minutes = 60
+max_pages_per_account = 3
+bootstrap_hours = 72
+bootstrap_max_pages = 3
+overlap_hours = 6
+request_gap_seconds = 5
+connect_timeout_seconds = 10
+read_timeout_seconds = 30
+max_attempts_per_request = 2
+# 含分页与重试在内的本轮总请求上限
+max_total_requests_per_run = 30
+max_run_seconds = 600
+
+[export]
+# 采集侧尽量都存；这里只决定“每日阅读索引”展示什么，不影响入库。
+include_reposts = false
+include_unknown = true
+# 别人回复本博主的帖子、被本博主回复的父帖（上游主动返回的对话上下文）
+include_context = false
+# 嵌套在引用帖里的被引用原帖
+include_quoted = false
+write_post_files = true
+write_daily_index = true
+
+[retention]
+raw_days = 7
+log_days = 30
+
+# 用大模型判断帖子是否在宣布「用量限额重置」，命中后发通知。
+#
+# 这是原方案 §9.3 明确排除的能力（第一版不自动调用 AI、收费流程不能默认开启），
+# 因此默认关闭。开启前先跑 `judge --dry-run` 看候选帖子量。
+[judge]
+enabled = false
+
+# backend = "claude_cli"：调本机已登录的 Claude Code，用订阅额度，不需要 API key。
+#   注意：Claude Code 本身带工具，把不可信帖文喂给它必须封死工具 ——
+#   代码里用了 --permission-mode manual + --disallowedTools + --strict-mcp-config
+#   + --disable-slash-commands 四道锁，详见 README「claude_cli 后端多一层风险」。
+# backend = "api"：走 Anthropic SDK，需 pip install anthropic 且配置 ANTHROPIC_API_KEY，
+#   输出有约束解码，最可靠，但单独计费。
+backend = "claude_cli"
+claude_executable = "claude"
+cli_timeout_seconds = 180
+
+model = "claude-opus-5"
+# 主要的成本/延迟杠杆。Opus 5 在 low / medium 上已经很强，先从低往高试。
+effort = "medium"          # low | medium | high | xhigh | max
+# Opus 5 默认开启思考，max_tokens 同时覆盖思考与输出 —— 调太小会被截断。
+max_tokens = 2048
+threshold = 0.7            # 模型判定为是、且概率达到此值才通知
+max_calls_per_run = 20     # 每轮上限
+max_calls_per_day = 200    # 24 小时滚动窗口上限
+max_text_chars = 4000      # 超长正文截断，避免冲淡 system 指令
+only_self_posts = true     # 只判博主本人发的帖；别人提到 reset 不是公告
+lookback_hours = 24        # 回看多久内首次发现的帖子
+# none = 只写日志和每日索引；log = 写警告日志；
+# macos = 本机通知中心（无需任何账号）；command = 调用 notify_command 指定的可执行文件
+notifier = "none"
+notify_command = ""
+
+[[accounts]]
+handle = "bcherny"
+enabled = true
+
+[[accounts]]
+handle = "simonw"
+enabled = true
+
+[[accounts]]
+handle = "dotey"
+enabled = true

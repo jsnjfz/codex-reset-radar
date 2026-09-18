@@ -1,0 +1,26 @@
+# 实际账号配置不提交（方案 §12）
+config.toml
+
+# 采集数据、原始响应、日志、输出都不提交
+data/
+logs/
+output/
+*.sqlite3
+*.sqlite3.lock
+*.sqlite3-journal
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.coverage
+
+# 编辑器 / 系统
+.DS_Store
+.idea/
+.vscode/
