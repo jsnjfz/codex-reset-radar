@@ -35,6 +35,8 @@ XWatchMonitor/findings.md
 
 # Article drafts and research writeups (kept local by request)
 *.md
+!README.md
+!X博主帖子自动采集方案.md
 !x-watch/README.md
 !x-watch/docs/source-validation.md
 !XWatchMonitor/README.md
